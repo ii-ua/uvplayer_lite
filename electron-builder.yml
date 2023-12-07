@@ -1,0 +1,49 @@
+appId: com.ii-uvp.lite
+productName: uvplayer_lite
+directories:
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+asarUnpack:
+  - resources/**
+win:
+  publish: github
+  target:
+    - target: nsis
+      arch:
+        - ia32
+    - target: nsis
+      arch:
+        - x64
+    - target: nsis
+      arch:
+        - arm64
+  executableName: uvplayer
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  artifactName: ${name}-win32-${arch}-${version}.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+linux:
+  publish: github
+  target:
+    - target: deb
+      arch:
+        - x64
+        - arm64
+  maintainer: lite.ii-uvp.com
+  category: AudioVideo
+  artifactName: ${name}-linux-${arch}-${version}.${ext}
+npmRebuild: true
+publish:
+  provider: github
+  owner: ii-ua
+  repo: uvplayer_lite
+  private: true
+  token: ${GH_TOKEN}
