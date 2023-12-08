@@ -1,5 +1,5 @@
 appId: com.ii-uvp.lite
-productName: uvplayer_lite
+productName: uvplayer-lite
 directories:
   buildResources: build
 files:

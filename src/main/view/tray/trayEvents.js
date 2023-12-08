@@ -1,5 +1,5 @@
 import { store } from '../../../utils';
-import { dialog, app } from 'electron';
+import { dialog, app, webContents } from 'electron';
 export const handleDeleteConfig = () => {
   dialog
     .showMessageBox({
@@ -19,4 +19,8 @@ export const handleDeleteConfig = () => {
         // Add your code here to handle the deletion
       }
     });
+};
+
+export const handleEditConfig = (win) => {
+  win.webContents.send('request-navigate', '/config-editor');
 };

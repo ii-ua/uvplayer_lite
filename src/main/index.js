@@ -1,28 +1,15 @@
-import { app, shell, BrowserWindow, protocol, net, dialog } from 'electron';
+import { app, shell, BrowserWindow, protocol, net } from 'electron';
 import path from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
-import { store, initial } from '../utils';
+import { initial } from '../utils';
 import './main-process-modules/handler';
-import { airtimeWorker, deviceWorker, downloadWorker, uploadWorker } from '../workers';
+import { downloadWorker } from '../workers';
 import icon from '../../resources/icon.png?asset';
 import packageJson from '../../package.json';
-import Sentry from '@sentry/electron';
 import log from 'electron-log/main';
 import { trayApp } from './view';
-import { autoUpdater } from 'electron-updater';
-import os from 'os';
 
-const url = `https://release.ii-uvp.com/update/${os.platform()}${os.arch()}/latest.yml`;
-console.log(url);
-
-Sentry.init({
-  dsn: 'https://7a655273ab05804053ea0459f6bb808b@o4506161259544576.ingest.sentry.io/4506161263083520'
-});
-
-const { updateDevice, updateStatusDevice, lastUpdateDevice } = deviceWorker;
-const { updateAirtime, generatePlaylistForDevice } = airtimeWorker;
 const { downloadAirtimeFiles } = downloadWorker;
-const { uploadLogs } = uploadWorker;
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -43,40 +30,14 @@ app.whenReady().then(() => {
       console.error('ERROR: Registering localurl protocol:', error);
     }
   });
-
-  const tray = trayApp.initTray();
-  tray.setToolTip('uvplayer');
-  tray.setContextMenu(trayApp.createContextMenu());
 });
 
 async function createWindow() {
   initial.initialDefaultFolder();
-  await updateDevice();
-  let width = 600;
-  let height = 600;
-  let x = 0;
-  let y = 0;
-  const device = store.get('device');
 
-  if (device) {
-    // Sentry.setUser({ id: device?._id, username: device?.deviceName });
-    // Sentry.setTag('deviceName', device?.deviceName);
-    // Sentry.setTag('location', device?.location);
-    const [widthStr, heightStr] = device.screens.split('x');
-    const [xStr, yStr] = device.position.split('x');
-
-    // Перетворіть рядки на числа
-    width = parseInt(widthStr);
-    height = parseInt(heightStr);
-    x = parseInt(xStr);
-    y = parseInt(yStr);
-  }
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: width === 0 ? 700 : width,
-    height: height === 0 ? 700 : height,
-    x: x,
-    y: y,
+    fullscreen: true,
     alwaysOnTop: !is.dev,
     resizable: false,
     frame: false,
@@ -89,6 +50,10 @@ async function createWindow() {
       nodeIntegration: true
     }
   });
+
+  const tray = trayApp.initTray();
+  tray.setToolTip('uvplayer-lite');
+  tray.setContextMenu(trayApp.createContextMenu(mainWindow));
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
@@ -111,13 +76,8 @@ async function createWindow() {
 }
 
 async function runWorkers() {
-  generatePlaylistForDevice();
   try {
-    await updateStatusDevice();
-    await updateAirtime();
     await downloadAirtimeFiles();
-    await uploadLogs();
-    await lastUpdateDevice();
   } catch (error) {
     log.error(error);
   }
@@ -155,53 +115,3 @@ app.on('window-all-closed', () => {
   }
 });
 log.warn(`The program is running. App version: ${packageJson.version}`);
-
-autoUpdater.autoDownload = true;
-
-function sendStatusToWindow(text) {
-  log.error(text);
-  // Тут можна надсилати статус до вікна додатку, якщо потрібно
-}
-
-autoUpdater.setFeedURL({
-  url: url,
-  serverType: 'json',
-  provider: 'generic',
-  useMultipleRangeRequest: false
-});
-
-autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...');
-});
-
-autoUpdater.on('update-available', () => {
-  sendStatusToWindow('Update available.');
-});
-
-autoUpdater.on('update-not-available', () => {
-  sendStatusToWindow('Update not available.');
-});
-
-autoUpdater.on('error', (err) => {
-  sendStatusToWindow(`Error in auto-updater: ${err.toString()}`);
-});
-
-autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = `Download speed: ${progressObj.bytesPerSecond}`;
-  log_message = `${log_message} - Downloaded ${progressObj.percent}%`;
-  log_message = `${log_message} (${progressObj.transferred}/${progressObj.total})`;
-  sendStatusToWindow(log_message);
-});
-
-autoUpdater.on('update-downloaded', () => {
-  sendStatusToWindow('Update downloaded; will install now');
-
-  autoUpdater.quitAndInstall();
-});
-
-app.on('ready', () => {
-  autoUpdater.checkForUpdatesAndNotify();
-});
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.

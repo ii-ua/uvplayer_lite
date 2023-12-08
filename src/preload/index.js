@@ -1,9 +1,9 @@
 import { contextBridge } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
-import { airtimePreload, authPreload, devicePreload, storePreload } from './preload-scripts';
+import { storePreload, navPreload } from './preload-scripts';
 
 // Custom APIs for renderer
-const api = { ...airtimePreload, ...authPreload, ...devicePreload, ...storePreload };
+const api = { ...storePreload, ...navPreload };
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

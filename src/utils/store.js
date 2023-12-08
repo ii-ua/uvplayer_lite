@@ -1,9 +1,8 @@
 import Store from 'electron-store';
 const store = new Store();
 store.set('STORAGE', {
-  AIRTIME: 'data/content/airtime',
-  HOT_PLAYLIST: 'data/content/hot-playlist',
-  CLIPS: 'data/content/clips',
+  CONTENT: 'data/content/',
+  CREDENTIALS: 'data/credentials',
   LOGS_MEDIA: 'data/logs/logs_media',
   LOGS_ERROR: 'data/logs/logs_error'
 });

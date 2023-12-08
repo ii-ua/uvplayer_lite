@@ -8,12 +8,15 @@ export const initTray = () => {
   return tray;
 };
 
-export const createContextMenu = () => {
+export const createContextMenu = (win) => {
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Setting',
       type: 'submenu',
-      submenu: [{ label: 'Delete config', type: 'normal', click: trayEvents.handleDeleteConfig }]
+      submenu: [
+        { label: 'Edit config', type: 'normal', click: () => trayEvents.handleEditConfig(win) },
+        { label: 'Delete config', type: 'normal', click: trayEvents.handleDeleteConfig }
+      ]
     },
     { label: 'About', type: 'normal' }
   ]);

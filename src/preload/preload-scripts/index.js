@@ -1,6 +1,4 @@
-import airtimePreload from './airtimePreload';
-import authPreload from './authPreload';
-import devicePreload from './devicePreload';
 import storePreload from './storePreload';
+import navPreload from './navPreload';
 
-export { airtimePreload, authPreload, devicePreload, storePreload };
+export { storePreload, navPreload };
