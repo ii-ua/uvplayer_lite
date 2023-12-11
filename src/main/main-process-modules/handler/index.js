@@ -1,3 +1,4 @@
 import './appHandler';
 import './storeHandler';
-import './filesHandler';
+import './servicesHandler';
+import './playlistHandler';

@@ -9,7 +9,7 @@ import packageJson from '../../package.json';
 import log from 'electron-log/main';
 import { trayApp } from './view';
 
-const { downloadAirtimeFiles } = downloadWorker;
+const { downloadFiles } = downloadWorker;
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -77,7 +77,7 @@ async function createWindow() {
 
 async function runWorkers() {
   try {
-    await downloadAirtimeFiles();
+    await downloadFiles();
   } catch (error) {
     log.error(error);
   }
@@ -88,7 +88,7 @@ async function runWorkers() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron');
+  electronApp.setAppUserModelId('com.ii-uvp');
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

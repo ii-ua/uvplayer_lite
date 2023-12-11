@@ -1,48 +1,15 @@
 // components/VideoPlayer.js
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import '@vidstack/react/player/styles/base.css';
-import { MediaPlayer, MediaProvider, useMediaPlayer } from '@vidstack/react';
-import moment from 'moment';
+import ReactPlayer from 'react-player';
 import log from 'electron-log/renderer';
+import style from './VideoPlayer.module.css';
 function InnerPlayer({ setCurrentSrcIndex, currentSrcIndex, playlist }) {
-  const player = useMediaPlayer();
-  const timeoutRef = useRef(null);
-
-  // Функція для установки таймера до наступного відео
-  const setNextVideoTimer = () => {
-    const now = moment();
-    const nextVideoIndex = currentSrcIndex + 1;
-
-    if (nextVideoIndex < playlist.length) {
-      // Перетворюємо час початку наступного відео з ISO строки до моменту і віднімаємо поточний час
-      const timeToNextVideo = moment(playlist[nextVideoIndex].startTime).diff(now);
-
-      timeoutRef.current = setTimeout(() => {
-        setCurrentSrcIndex(nextVideoIndex);
-      }, timeToNextVideo);
-    }
-  };
-
-  useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current); // Видалити попередній таймер
-    }
-    setNextVideoTimer(); // Встановити новий таймер для поточного відео
-
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current); // Очистити таймер при розмонтовуванні компоненту
-      }
-    };
-  }, [currentSrcIndex, playlist]);
-
   useEffect(() => {
     const playHandler = () => {};
     const errorHandler = (e) => {
       const current = playlist[currentSrcIndex];
-      const { content } = current;
-      log.error(e.detail, `fileError: [id:${content._id} slug:${content.slug}]`);
+      log.error(e.detail, `fileError: [name:${current?.name}]`);
       setCurrentSrcIndex(0);
     };
     const pauseHandler = () => {
@@ -52,10 +19,8 @@ function InnerPlayer({ setCurrentSrcIndex, currentSrcIndex, playlist }) {
     const playingHandler = () => {
       const current = playlist[currentSrcIndex];
       if (current) {
-        const { content, startTime, endTime } = current;
-        log.info(
-          `Playing a file: [ id:${content._id} fileName:${content.fileName} slug:${content.slug} duration:${content.duration} startTime:${startTime} endTime:${endTime}]`
-        );
+        const { name } = current;
+        log.info(`Playing a file: [ name:${name}]`);
       }
     };
     const endedHandler = () => {
@@ -84,32 +49,49 @@ function InnerPlayer({ setCurrentSrcIndex, currentSrcIndex, playlist }) {
 
 export default function VideoPlayer({ playlist, width, height }) {
   const [currentSrcIndex, setCurrentSrcIndex] = useState(0);
-  const [currentSrc, setCurrentSrc] = useState(
-    playlist?.length > 0 ? playlist[currentSrcIndex] : ''
-  );
+  const [currentSrc, setCurrentSrc] = useState(playlist[0]);
+  console.log(currentSrc);
+
+  const playNext = () => {
+    const nextVideoIndex = currentSrcIndex + 1;
+
+    if (nextVideoIndex < playlist.length) {
+      setCurrentSrcIndex(nextVideoIndex);
+    } else {
+      setCurrentSrcIndex(0);
+    }
+  };
+  const onStart = () => {
+    log.info(`Playing a file: [ name: ${currentSrc?.name} ]`);
+  };
+
+  const onEnded = () => {
+    console.log('play next');
+    playNext();
+  };
+
+  const onError = (error) => {
+    console.log('error', error);
+  };
+
+  const onDispose = () => {
+    console.log('dis');
+  };
 
   useEffect(() => {
-    setCurrentSrc(playlist?.length > 0 ? playlist[currentSrcIndex] : '');
+    setCurrentSrc(playlist?.length > 0 ? playlist[currentSrcIndex] : playlist[0]);
   }, [currentSrcIndex, playlist]);
 
-  const playerRef = useRef();
   return (
-    <MediaPlayer
-      ref={playerRef}
-      preload
-      style={{ width, height }}
-      aspectRatio={`${width / height}`}
-      autoplay
-      title="Sprite Fight"
-      src={currentSrc ?? ''}
-    >
-      <MediaProvider />
-      <InnerPlayer
-        setCurrentSrcIndex={setCurrentSrcIndex}
-        currentSrcIndex={currentSrcIndex}
-        playlist={playlist ?? []}
-      />
-    </MediaPlayer>
+    <ReactPlayer
+      width={width}
+      height={height}
+      url={currentSrc?.src}
+      playing={true}
+      onStart={onStart}
+      onEnded={onEnded}
+      onError={onError}
+    />
   );
 }
 

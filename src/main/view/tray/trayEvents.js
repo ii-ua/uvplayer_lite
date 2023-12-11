@@ -1,5 +1,5 @@
 import { store } from '../../../utils';
-import { dialog, app, webContents } from 'electron';
+import { dialog, app } from 'electron';
 export const handleDeleteConfig = () => {
   dialog
     .showMessageBox({

@@ -26,8 +26,10 @@
     "@fontsource/open-sans": "^5.0.17",
     "@google-cloud/storage": "^7.7.0",
     "@vidstack/react": "^1.5.5",
+    "antd": "^5.12.1",
     "axios": "^1.6.2",
     "axios-retry": "^4.0.0",
+    "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",
     "electron-log": "^5.0.1",
     "electron-store": "^8.1.0",
@@ -35,7 +37,9 @@
     "hls.js": "^1.4.12",
     "modern-normalize": "^2.0.0",
     "moment": "^2.29.4",
-    "react-router-dom": "^6.20.1"
+    "react-player": "^2.13.0",
+    "react-router-dom": "^6.20.1",
+    "react-select": "^5.8.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.1",

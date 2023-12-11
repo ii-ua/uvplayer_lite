@@ -2,36 +2,39 @@ import { ipcMain } from 'electron';
 import { store } from '../../../utils';
 import log from 'electron-log/main';
 
-ipcMain.on('save-key', (event, data) => {
-  store.set('activationKey', data.activateKey);
-  log.warn('Received save-key in main process.');
-
+ipcMain.handle('store:get-setting', () => {
+  let setting = '';
   try {
-    log.warn('Key successfully saved in main process.');
-    event.reply('key-saved');
-  } catch (error) {
-    log.error('Error while saving the key:', error);
+    setting = store.get('setting');
+    return setting;
+  } catch (err) {
+    log.error(err);
+    return setting;
   }
 });
 
-ipcMain.on('get-activationKey', (event) => {
-  const activationKey = store.get('activationKey');
-  event.reply('get-activationKey-response', activationKey);
+ipcMain.on('store:save-setting', (event, setting) => {
+  console.log(setting);
+  try {
+    store.set('setting', setting);
+  } catch (err) {
+    log.error(err);
+  }
 });
 
-ipcMain.on('subscribe-to-store', (event, storeKey) => {
+ipcMain.on('store:subscribe', (event, storeKey) => {
   const changeListener = (newValue) => {
-    event.sender.send('store-data-changed', storeKey, newValue);
+    event.sender.send('store:changed', storeKey, newValue);
   };
 
-  store.onDidChange(storeKey, changeListener);
+  const unsubscribe = store.onDidChange(storeKey, changeListener);
 
   // Збереження функції для видалення підписки
-  event.sender.once(`unsubscribe-${storeKey}`, () => {
-    store.offDidChange(storeKey, changeListener);
+  event.sender.once(`store:unsubscribe-${storeKey}`, () => {
+    unsubscribe();
   });
 });
 
-ipcMain.on('unsubscribe-from-store', (event, storeKey) => {
-  event.sender.emit(`unsubscribe-${storeKey}`);
+ipcMain.on('store:unsubscribe', (event, storeKey) => {
+  event.sender.emit(`store:unsubscribe-${storeKey}`);
 });

@@ -5,7 +5,7 @@ export function cleanupFiles(items, folder) {
   const filesInFolder = fs.readdirSync(folder);
 
   for (let file of filesInFolder) {
-    if (!items.some(({ slug }) => slug === file)) {
+    if (!items.some(({ name }) => name === file)) {
       fs.unlinkSync(path.join(folder, file));
     }
   }

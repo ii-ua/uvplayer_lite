@@ -1,12 +1,14 @@
 import { ipcRenderer } from 'electron';
 export default {
+  getSetting: () => ipcRenderer.invoke('store:get-setting'),
+  saveSetting: (setting) => ipcRenderer.send('store:save-setting', setting),
   subscribeToStore: (storeKey, callback) => {
-    ipcRenderer.on('store-data-changed', (event, newValue) => {
+    ipcRenderer.on('store:changed', (event, newValue) => {
       if (callback) callback(newValue);
     });
-    ipcRenderer.send('subscribe-to-store', storeKey);
+    ipcRenderer.send('store:subscribe', storeKey);
   },
   unsubscribeFromStore: (storeKey) => {
-    ipcRenderer.send('unsubscribe-from-store', storeKey);
+    ipcRenderer.send('store:unsubscribe', storeKey);
   }
 };

@@ -3,7 +3,8 @@ import * as trayEvents from './trayEvents';
 export const initTray = () => {
   const path = `${app.getAppPath()}${'/resources/tray/tray_app.png'}`;
   const image = nativeImage.createFromPath(path);
-  const tray = new Tray(image);
+  const resizedImage = image.resize({ width: 24, height: 24 });
+  const tray = new Tray(resizedImage);
 
   return tray;
 };
@@ -18,7 +19,8 @@ export const createContextMenu = (win) => {
         { label: 'Delete config', type: 'normal', click: trayEvents.handleDeleteConfig }
       ]
     },
-    { label: 'About', type: 'normal' }
+    { label: 'About', type: 'normal' },
+    { label: 'Quit', type: 'normal', click: () => app.quit() }
   ]);
 
   return contextMenu;
