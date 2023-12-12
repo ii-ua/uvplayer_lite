@@ -43,6 +43,7 @@ app.whenReady().then(() => {
 async function createWindow() {
   initial.initialDefaultFolder();
   initial.initialShutdown();
+
   store.onDidChange('setting', () => initial.initialShutdown());
 
   // Create the browser window.
