@@ -1,7 +1,6 @@
 // components/VideoPlayer.js
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import '@vidstack/react/player/styles/base.css';
 import { MediaPlayer, MediaProvider, useMediaPlayer, useMediaStore } from '@vidstack/react';
 import moment from 'moment';
 import log from 'electron-log/renderer';

@@ -1,7 +1,10 @@
 import Title from '../../shared/componens/Title/Title';
 import style from './ConfigEditorPage.module.css';
 import { useEffect, useState } from 'react';
-import { Select, TimePicker, Switch, Button } from 'antd';
+import Select from 'antd/lib/select';
+import TimePicker from 'antd/lib/time-picker';
+import Switch from 'antd/lib/switch';
+import Button from 'antd/lib/button';
 import { useNavigate } from 'react-router-dom';
 import Label from '../../shared/componens/Label/Label';
 import dayjs from 'dayjs';
