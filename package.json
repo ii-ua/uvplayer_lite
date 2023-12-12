@@ -1,7 +1,7 @@
 {
   "name": "uvplayer-lite",
   "productName": "uvplayer-lite",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Universal video player lite version",
   "main": "./out/main/index.js",
   "author": "identity invest",

@@ -45,7 +45,7 @@ export default function VideoPlayer({ playlist, width, height }) {
     const current = playlist[currentSrcIndex];
     console.log('pause', current);
   };
-  const onStarted = () => {
+  const onPlay = () => {
     const current = playlist[currentSrcIndex];
     if (current) {
       const { name } = current;
@@ -73,7 +73,7 @@ export default function VideoPlayer({ playlist, width, height }) {
       src={currentSrc?.src ?? ''}
       onError={onError}
       onPause={onPause}
-      onStarted={onStarted}
+      onPlay={onPlay}
       onEnded={onEnded}
       currentTime={0}
     >
