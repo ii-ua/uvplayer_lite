@@ -1,46 +1,23 @@
 // components/VideoPlayer.js
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import ReactPlayer from 'react-player';
+import '@vidstack/react/player/styles/base.css';
+import { MediaPlayer, MediaProvider, useMediaPlayer, useMediaStore } from '@vidstack/react';
+import moment from 'moment';
 import log from 'electron-log/renderer';
-import style from './VideoPlayer.module.css';
-function InnerPlayer({ setCurrentSrcIndex, currentSrcIndex, playlist }) {
+function InnerPlayer({ currentSrcIndex, playlist }) {
+  const player = useMediaPlayer();
+
   useEffect(() => {
-    const playHandler = () => {};
-    const errorHandler = (e) => {
-      const current = playlist[currentSrcIndex];
-      log.error(e.detail, `fileError: [name:${current?.name}]`);
-      setCurrentSrcIndex(0);
-    };
-    const pauseHandler = () => {
-      const current = playlist[currentSrcIndex];
-      console.log('pause', current);
-    };
-    const playingHandler = () => {
-      const current = playlist[currentSrcIndex];
-      if (current) {
-        const { name } = current;
-        log.info(`Playing a file: [ name:${name}]`);
-      }
-    };
-    const endedHandler = () => {
-      const nextIndex = currentSrcIndex < playlist.length - 1 ? currentSrcIndex + 1 : 0;
-      setCurrentSrcIndex(nextIndex);
+    const playHandler = async () => {
+      player.play();
     };
 
-    player.addEventListener('play', playHandler);
-    player.addEventListener('pause', pauseHandler);
-    player.addEventListener('playing', playingHandler);
-    player.addEventListener('ended', endedHandler);
-    player.addEventListener('error', errorHandler);
+    player.addEventListener('ended', playHandler);
 
     // Видаляємо слухачі, коли компонент або ефект завершують роботу
     return () => {
-      player.removeEventListener('play', playHandler);
-      player.removeEventListener('pause', pauseHandler);
-      player.removeEventListener('playing', playingHandler);
-      player.removeEventListener('ended', endedHandler);
-      player.removeEventListener('error', errorHandler);
+      player.removeEventListener('ended', playHandler);
     };
   }, [player, currentSrcIndex, playlist]);
 
@@ -49,49 +26,65 @@ function InnerPlayer({ setCurrentSrcIndex, currentSrcIndex, playlist }) {
 
 export default function VideoPlayer({ playlist, width, height }) {
   const [currentSrcIndex, setCurrentSrcIndex] = useState(0);
-  const [currentSrc, setCurrentSrc] = useState(playlist[0]);
-  console.log(currentSrc);
-
-  const playNext = () => {
-    const nextVideoIndex = currentSrcIndex + 1;
-
-    if (nextVideoIndex < playlist.length) {
-      setCurrentSrcIndex(nextVideoIndex);
-    } else {
-      setCurrentSrcIndex(0);
-    }
-  };
-  const onStart = () => {
-    log.info(`Playing a file: [ name: ${currentSrc?.name} ]`);
-  };
-
-  const onEnded = () => {
-    console.log('play next');
-    playNext();
-  };
-
-  const onError = (error) => {
-    console.log('error', error);
-  };
-
-  const onDispose = () => {
-    console.log('dis');
-  };
+  const [currentSrc, setCurrentSrc] = useState(
+    playlist?.length > 0 ? playlist[currentSrcIndex] : ''
+  );
 
   useEffect(() => {
-    setCurrentSrc(playlist?.length > 0 ? playlist[currentSrcIndex] : playlist[0]);
+    setCurrentSrc(playlist?.length > 0 ? playlist[currentSrcIndex] : '');
   }, [currentSrcIndex, playlist]);
 
+  const onError = (detail) => {
+    console.log(playerRef);
+    const current = playlist[currentSrcIndex];
+    console.log(current);
+    log.error(detail, `fileError: [name:${current?.name}]`);
+    setCurrentSrcIndex(0);
+  };
+
+  const onPause = () => {
+    const current = playlist[currentSrcIndex];
+    console.log('pause', current);
+  };
+  const onStarted = () => {
+    const current = playlist[currentSrcIndex];
+    if (current) {
+      const { name } = current;
+      log.info(`Playing a file: [ name:${name} ]`);
+    }
+  };
+  const onEnded = () => {
+    const nextIndex = currentSrcIndex < playlist.length - 1 ? currentSrcIndex + 1 : 0;
+    setCurrentSrcIndex(nextIndex);
+  };
+
+  const onEmptied = () => {
+    console.log('empty');
+  };
+
+  const playerRef = useRef();
   return (
-    <ReactPlayer
-      width={width}
-      height={height}
-      url={currentSrc?.src}
-      playing={true}
-      onStart={onStart}
-      onEnded={onEnded}
+    <MediaPlayer
+      ref={playerRef}
+      preload
+      autoplay
+      style={{ width, height }}
+      aspectRatio={`${width / height}`}
+      title={`${currentSrc?.name ?? ''}`}
+      src={currentSrc?.src ?? ''}
       onError={onError}
-    />
+      onPause={onPause}
+      onStarted={onStarted}
+      onEnded={onEnded}
+      currentTime={0}
+    >
+      <MediaProvider />
+      <InnerPlayer
+        setCurrentSrcIndex={setCurrentSrcIndex}
+        currentSrcIndex={currentSrcIndex}
+        playlist={playlist ?? []}
+      />
+    </MediaPlayer>
   );
 }
 

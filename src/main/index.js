@@ -15,8 +15,10 @@ protocol.registerSchemesAsPrivileged([
   {
     scheme: 'localurl',
     privileges: {
-      bypassCSP: true,
-      stream: true
+      standard: true,
+      secure: true,
+      stream: true,
+      supportFetchAPI: true
     }
   }
 ]);
@@ -24,8 +26,14 @@ protocol.registerSchemesAsPrivileged([
 app.whenReady().then(() => {
   protocol.handle('localurl', (request) => {
     const url = request.url.replace(/^localurl:\/\//, '');
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        Range: 'bytes=0-'
+      }
+    };
     try {
-      return net.fetch(`file:///${url}`);
+      return net.fetch(`file:///${url}`, requestOptions);
     } catch (error) {
       console.error('ERROR: Registering localurl protocol:', error);
     }
@@ -47,6 +55,7 @@ async function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
       sandbox: false,
+      webSecurity: false,
       nodeIntegration: true
     }
   });
