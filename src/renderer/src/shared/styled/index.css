@@ -90,6 +90,7 @@ video {
   border-radius: 0;
   box-sizing: border-box;
   font-family: 'Open Sans';
+  overflow: hidden;
 }
 
 body {

@@ -1,7 +1,7 @@
 import { app, shell, BrowserWindow, protocol, net } from 'electron';
 import path from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
-import { initial } from '../utils';
+import { initial, store } from '../utils';
 import './main-process-modules/handler';
 import { downloadWorker } from '../workers';
 import icon from '../../resources/icon.png?asset';
@@ -42,6 +42,8 @@ app.whenReady().then(() => {
 
 async function createWindow() {
   initial.initialDefaultFolder();
+  initial.initialShutdown();
+  store.onDidChange('setting', () => initial.initialShutdown());
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({

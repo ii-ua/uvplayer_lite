@@ -1,7 +1,7 @@
 {
   "name": "uvplayer-lite",
   "productName": "uvplayer-lite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Universal video player lite version",
   "main": "./out/main/index.js",
   "author": "identity invest",
@@ -37,6 +37,7 @@
     "hls.js": "^1.4.13",
     "modern-normalize": "^2.0.0",
     "moment": "^2.29.4",
+    "node-schedule": "^2.1.1",
     "react-player": "^2.13.0",
     "react-router-dom": "^6.20.1",
     "react-select": "^5.8.0"

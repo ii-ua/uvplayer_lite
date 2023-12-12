@@ -14,7 +14,6 @@ ipcMain.handle('store:get-setting', () => {
 });
 
 ipcMain.on('store:save-setting', (event, setting) => {
-  console.log(setting);
   try {
     store.set('setting', setting);
   } catch (err) {
