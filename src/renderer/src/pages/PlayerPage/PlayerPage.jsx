@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import VideoPlayer from '../../module/VideoPlayer/VideoPlayer.jsx';
 import log from 'electron-log/renderer.js';
+import { useNavigate } from 'react-router-dom';
 
 export default function PlayerPage() {
   const [playlist, setPlaylist] = useState([]);
@@ -8,6 +9,12 @@ export default function PlayerPage() {
     const pl = await window.api.getPlaylist();
     setPlaylist(pl);
   };
+  const navigate = useNavigate();
+  useEffect(() => {
+    window.api.navigate((path) => {
+      navigate(path);
+    });
+  }, [navigate]);
   useEffect(() => {
     getPlaylist();
     const handleStoreChange = () => {
