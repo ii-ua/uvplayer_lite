@@ -26,7 +26,8 @@ export const initialDefaultFolder = () => {
 export const initialShutdown = () => {
   const setting = store.get('setting');
   const isShutdown = setting?.isShutdown;
-  const time = setting?.time !== '' ? setting?.time : '00:00';
+  const time = setting?.time ? setting?.time : '00:00';
+  console.log(time);
   shutdown({ time, isShutdown });
 };
 
