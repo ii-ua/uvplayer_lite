@@ -88,11 +88,7 @@ async function createWindow() {
 }
 
 async function runWorkers() {
-  try {
-    await downloadFiles();
-  } catch (error) {
-    log.error(error);
-  }
+  await downloadFiles();
 }
 
 // This method will be called when Electron has finished
