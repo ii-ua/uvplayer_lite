@@ -1,45 +1,57 @@
-name: Build and Release Electron App
+name: Build/release Electron app
 
 on:
   push:
     tags:
-      - 'v*'
+      - v*.*.*
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-      - name: Install Dependencies
-        run: yarn install
-      - name: Deploy Windows
-        env:
-          SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
-          SENTRY_ORG: ${{secrets.SENTRY_ORG}}
-          SENTRY_PROJECT: ${{secrets.SENTRY_PROJECT}}
-          GH_TOKEN: ${{secrets.GH_TOKEN}}
-        run: yarn deploy:win
+  release:
+    runs-on: ${{ matrix.os }}
 
-  build-linux:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
     steps:
-      - name: Checkout Repository
+      - name: Check out Git repository
         uses: actions/checkout@v4
-      - name: Set up Node.js
+
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
       - name: Install Dependencies
         run: yarn install
-      - name: Deploy Linux
         env:
           SENTRY_AUTH_TOKEN: ${{secrets.SENTRY_AUTH_TOKEN}}
           SENTRY_ORG: ${{secrets.SENTRY_ORG}}
           SENTRY_PROJECT: ${{secrets.SENTRY_PROJECT}}
           GH_TOKEN: ${{secrets.GH_TOKEN}}
-        run: yarn deploy:linux
+
+      - name: build-linux
+        if: matrix.os == 'ubuntu-latest'
+        run: yarn build:linux
+
+      - name: build-win
+        if: matrix.os == 'windows-latest'
+        run: yarn build:win
+
+      - name: release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          files: |
+            dist/*.exe
+            dist/*.zip
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.snap
+            dist/*.deb
+            dist/*.rpm
+            dist/*.tar.gz
+            dist/latest*.yml
+            dist/*.blockmap
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

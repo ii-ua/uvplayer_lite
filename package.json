@@ -14,8 +14,6 @@
     "build": "electron-vite build",
     "build:win": "npm run build && electron-builder --win --config --publish never",
     "build:linux": "npm run build && electron-builder --linux --config --publish never",
-    "deploy:win": "npm run build && electron-builder --win --config --publish always",
-    "deploy:linux": "npm run build && electron-builder --linux --config --publish always",
     "bump": "npm version patch -m \"Release %s\" && git push && git push --tags",
     "postinstall": "electron-builder install-app-deps"
   },
