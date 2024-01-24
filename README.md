@@ -1,31 +1,55 @@
-# uvplayer
+# uvplayer-lite
 
-An Electron application with React
+## Introduction
+`uvplayer-lite` is the lite version of the universal video player, offering a simplified and lightweight user experience. This  focuses on essential functionalities, maintaining performance and ease of use. Developed using Electron and React, it's a versatile tool for video playback.
 
-## Recommended IDE Setup
+## Features
+- Lightweight and efficient video player
+- Simplified user interface for ease of use
+- Integration with modern web technologies
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## Installation
+To install `uvplayer-lite`, follow these steps:
+- `git clone`
+- `cd uvplayer_lite`
+- `yarn install`
 
-## Project Setup
+## Scripts
+- **Format Code**: `yarn format`
+- **Lint**: `yarn lint`
+- **Start Application**: `npm start`
+- **Start in Development Mode**: `yarn start:dev`
+- **Build Application**: `yarn build`
+- **Build for Windows**: `yarn build:win`
+- **Build for Linux**: `yarn build:linux`
+- **Version Bump**: `yarn bump`
+- **Post-installation**: `yarn postinstall`
 
-### Install
+## Dependencies
+Key dependencies include:
+- Electron and toolkits: `@electron-toolkit/*`, `electron-log`, `electron-store`
+- UI components: `antd`, `react-player`, `react-select`
+- Networking and data handling: `axios`, `axios-retry`, `googleapis`
+- Video playback: `@vidstack/react`, `hls.js`
 
-```bash
-$ yarn
-```
+## Running the Application
+To start `uvplayer-lite` in a development environment:
+`yarn start:dev`
 
-### Development
+## Building the Application
+To build `uvplayer-lite` for production:
+- For Windows: `yarn build:win`
+- For Linux: `yarn build:linux`
 
-```bash
-$ yarn dev
-```
+## Contributing
+Contributions are welcome. Follow the project's contribution guidelines when submitting pull requests or issues.
 
-### Build
+## Author
+Identity Invest
 
-```bash
-# For windows
-$ yarn build:win
+## License
+This project is licensed under the MIT License.
 
-# For Linux
-$ yarn build:linux
-```
+---
+
+For more information, visit [uvplayer-lite on GitHub](https://github.com/ii-ua/uvplayer_lite).
