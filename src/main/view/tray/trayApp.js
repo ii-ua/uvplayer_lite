@@ -1,4 +1,5 @@
 import { Tray, nativeImage, Menu, app } from 'electron';
+import { store } from '../../../utils';
 import * as trayEvents from './trayEvents';
 export const initTray = () => {
   const path = `${app.getAppPath()}${'/resources/tray/tray_app.png'}`;
@@ -16,6 +17,7 @@ export const createContextMenu = (win) => {
       type: 'submenu',
       submenu: [
         { label: 'Edit config', type: 'normal', click: () => trayEvents.handleEditConfig(win) },
+        { label: 'Open config file', type: 'normal', click: () => store.openInEditor() },
         { label: 'Delete config', type: 'normal', click: trayEvents.handleDeleteConfig }
       ]
     },

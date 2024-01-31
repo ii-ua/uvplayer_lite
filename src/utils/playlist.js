@@ -1,12 +1,18 @@
 import { fileOperations, store } from '.';
 import path from 'path';
 import url from 'url';
+
+const sortByName = (items) => {
+  return items.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+};
 export const generatePlaylist = () => {
   const contents = store.get('contents.current');
   const STORAGE = store.get('STORAGE');
   const playlist = [];
+  const sortedContents = sortByName(contents);
+  console.log(sortedContents);
   if (contents) {
-    for (const content of contents) {
+    for (const content of sortedContents) {
       const destPath = path.join(process.cwd(), STORAGE.CONTENT, content.name);
       if (
         fileOperations.fileExists(destPath) &&
@@ -17,5 +23,7 @@ export const generatePlaylist = () => {
       }
     }
   }
+
+  console.log(playlist);
   return playlist;
 };
