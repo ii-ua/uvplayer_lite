@@ -10,7 +10,6 @@ export const generatePlaylist = () => {
   const STORAGE = store.get('STORAGE');
   const playlist = [];
   const sortedContents = sortByName(contents);
-  console.log(sortedContents);
   if (contents) {
     for (const content of sortedContents) {
       const destPath = path.join(process.cwd(), STORAGE.CONTENT, content.name);
@@ -24,6 +23,5 @@ export const generatePlaylist = () => {
     }
   }
 
-  console.log(playlist);
   return playlist;
 };

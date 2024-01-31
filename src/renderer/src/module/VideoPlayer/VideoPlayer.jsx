@@ -1,8 +1,6 @@
-// components/VideoPlayer.js
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { MediaPlayer, MediaProvider, useMediaPlayer, useMediaStore } from '@vidstack/react';
-import moment from 'moment';
+import { MediaPlayer, MediaProvider, useMediaPlayer } from '@vidstack/react';
 import log from 'electron-log/renderer';
 function InnerPlayer({ currentSrcIndex, playlist }) {
   const player = useMediaPlayer();
@@ -57,17 +55,13 @@ export default function VideoPlayer({ playlist, width, height }) {
     setCurrentSrcIndex(nextIndex);
   };
 
-  const onEmptied = () => {
-    console.log('empty');
-  };
-
   const playerRef = useRef();
   return (
     <MediaPlayer
       ref={playerRef}
       preload
       autoplay
-      style={{ width, height }}
+      style={{ width, height, backgroundColor: 'black' }}
       aspectRatio={`${width / height}`}
       title={`${currentSrc?.name ?? ''}`}
       src={currentSrc?.src ?? ''}

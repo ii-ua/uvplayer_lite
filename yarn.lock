@@ -1424,10 +1424,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vidstack/react@^1.5.5":
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/@vidstack/react/-/react-1.6.2.tgz#dda9e07ce71a3cef87b733a97be55983319c575c"
-  integrity sha512-Uz62XOuDfNesnRGwptBMCs2dpYkob53i32PeesE62fkIiFU5pJu4Zx03Wm43wWgR1/1BKikuHQaQlU8MMZLfIQ==
+"@vidstack/react@^1.9.8":
+  version "1.10.3"
+  resolved "https://registry.yarnpkg.com/@vidstack/react/-/react-1.10.3.tgz#1c75e7252da7738315aa58b1bdcf6ebc33fbd3c4"
+  integrity sha512-cQBpp0wszBJ0R8fOhQtNaCaKc76VCdGnIgnlasWNrNmTbxjxgZScJKNFV3UhE7AibaP6RbXYReDlyViyhQLudQ==
   dependencies:
     media-captions "^1.0.1"
 
