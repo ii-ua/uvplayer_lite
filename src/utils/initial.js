@@ -9,9 +9,8 @@ const isWindows = process.platform === 'win32';
 let shutdownJob;
 
 const createFolder = (folder) => {
-  const folderPath = path.join(process.cwd(), folder);
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath, { recursive: true }); // 'recursive' дозволяє створювати вкладені каталоги
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder, { recursive: true }); // 'recursive' дозволяє створювати вкладені каталоги
   }
 };
 

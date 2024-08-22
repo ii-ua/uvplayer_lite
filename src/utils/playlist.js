@@ -12,7 +12,7 @@ export const generatePlaylist = () => {
   const sortedContents = sortByName(contents);
   if (contents) {
     for (const content of sortedContents) {
-      const destPath = path.join(process.cwd(), STORAGE.CONTENT, content.name);
+      const destPath = path.join(STORAGE.CONTENT, content.name);
       if (
         fileOperations.fileExists(destPath) &&
         fileOperations.isFileSizeCorrect(destPath, content.size)

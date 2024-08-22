@@ -4,11 +4,11 @@ import path from 'path';
 import log from 'electron-log';
 import fs from 'fs';
 import { fileOperations } from '../../utils';
-
+import { app } from 'electron';
 const pathConf = store.get('STORAGE.CONF');
 
 function authorizeGoogleDrive() {
-  const credentials = path.join(process.cwd(), pathConf, 'credentials.json');
+  const credentials = path.join(pathConf, 'credentials.json');
   const auth = new google.auth.GoogleAuth({
     keyFile: credentials,
     scopes: ['https://www.googleapis.com/auth/drive']
@@ -68,7 +68,7 @@ export async function downloadFiles() {
     store.set('contents.next', files);
 
     for (const file of files) {
-      const destPath = path.join(process.cwd(), STORAGE.CONTENT, file.name);
+      const destPath = path.join(STORAGE.CONTENT, file.name);
 
       if (
         fileOperations.fileExists(destPath) &&

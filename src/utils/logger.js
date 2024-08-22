@@ -26,23 +26,21 @@ if (log.transports.file) {
   log.transports.file.resolvePathFn = (variables, msg) => {
     const STORAGE = store.get('STORAGE');
     if (msg?.level === 'info') {
-      const logsMediaDir = path.join(process.cwd(), STORAGE.LOGS_MEDIA);
-      if (!fs.existsSync(logsMediaDir)) {
-        fs.mkdirSync(logsMediaDir);
+      if (!fs.existsSync(STORAGE.LOGS_MEDIA)) {
+        fs.mkdirSync(STORAGE.LOGS_MEDIA);
       }
 
-      deleteOldLogs(logsMediaDir, 45);
+      deleteOldLogs(STORAGE.LOGS_MEDIA, 45);
 
-      return path.join(logsMediaDir, `log_${moment().format('YYYY-MM-DD')}.txt`);
+      return path.join(STORAGE.LOGS_MEDIA, `log_${moment().format('YYYY-MM-DD')}.txt`);
     } else {
-      const logsErrorDir = path.join(process.cwd(), STORAGE.LOGS_ERROR);
-      if (!fs.existsSync(logsErrorDir)) {
-        fs.mkdirSync(logsErrorDir);
+      if (!fs.existsSync(STORAGE.LOGS_ERROR)) {
+        fs.mkdirSync(STORAGE.LOGS_ERROR);
       }
 
-      deleteOldLogs(logsErrorDir, 30);
+      deleteOldLogs(STORAGE.LOGS_ERROR, 30);
 
-      return path.join(logsErrorDir, `log-error_${moment().format('YYYY-MM-DD')}.txt`);
+      return path.join(STORAGE.LOGS_ERROR, `log-error_${moment().format('YYYY-MM-DD')}.txt`);
     }
   };
   log.transports.file.level = ['warn', 'error', 'verbose', 'debug', 'silly'];
