@@ -13,6 +13,7 @@ export function ConfigEditorPage() {
   const [selectedOption, setSelectedOption] = useState('');
   const [time, setTime] = useState('');
   const [isShutdown, setIsShutdown] = useState(false);
+  const [isAutostart, setIsAutostart] = useState(false);
   const navigate = useNavigate();
 
   const onFolders = async () => {
@@ -25,6 +26,7 @@ export function ConfigEditorPage() {
       setSelectedOption(setting?.folder ?? '');
       setTime(dayjs(setting?.time ?? '00:00', 'HH:mm'));
       setIsShutdown(setting?.isShutdown ?? false);
+      setIsAutostart(setting?.isAutostart ?? false);
     };
     fetchSetting();
     onFolders();
@@ -38,7 +40,8 @@ export function ConfigEditorPage() {
     window.api.saveSetting({
       folder: selectedOption,
       time: time.format('HH:mm'),
-      isShutdown
+      isShutdown,
+      isAutostart
     });
   };
 
@@ -77,6 +80,10 @@ Select the folder from Google drive and configure the player settings."
           <div className={style.inner}>
             <Label title="Turn off the device:" />
             <Switch value={time ? isShutdown : false} onChange={() => setIsShutdown(!isShutdown)} />
+          </div>
+          <div className={style.inner}>
+            <Label title="Automatically launch the app:" />
+            <Switch value={isAutostart} onChange={() => setIsAutostart(!isAutostart)} />
           </div>
         </div>
         <div className={style.wrapperButton}>

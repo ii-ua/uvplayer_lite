@@ -40,6 +40,7 @@ linux:
         - arm64
   maintainer: lite.ii-uvp.com
   category: AudioVideo
+  packageCategory: AudioVideo
   artifactName: ${name}-linux-${arch}-${version}.${ext}
 npmRebuild: true
 publish:

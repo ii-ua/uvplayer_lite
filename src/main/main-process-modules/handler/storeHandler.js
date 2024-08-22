@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron';
 import { store } from '../../../utils';
 import log from 'electron-log/main';
+import AutoLaunch from 'auto-launch';
 
 ipcMain.handle('store:get-setting', () => {
   let setting = '';
@@ -16,6 +17,23 @@ ipcMain.handle('store:get-setting', () => {
 ipcMain.on('store:save-setting', (event, setting) => {
   try {
     store.set('setting', setting);
+    const autoLauncher = new AutoLaunch({
+      name: 'uvplayer'
+    });
+
+    autoLauncher.isEnabled().then(async (isEnabled) => {
+      if (isEnabled) {
+        try {
+          await autoLauncher.disable();
+        } catch (err) {
+          log.error(err);
+        }
+      } else {
+        try {
+          await autoLauncher.enable();
+        } catch (err) {}
+      }
+    });
   } catch (err) {
     log.error(err);
   }

@@ -4,7 +4,6 @@ import path from 'path';
 import log from 'electron-log';
 import fs from 'fs';
 import { fileOperations } from '../../utils';
-import { app } from 'electron';
 const pathConf = store.get('STORAGE.CONF');
 
 function authorizeGoogleDrive() {
