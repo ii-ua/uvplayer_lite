@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { MediaPlayer, MediaProvider, useMediaPlayer } from '@vidstack/react';
 import log from 'electron-log/renderer';
+import style from './VideoPlayer.module.css';
 function InnerPlayer({ currentSrcIndex, playlist }) {
   const player = useMediaPlayer();
 
@@ -58,9 +59,10 @@ export default function VideoPlayer({ playlist, width, height }) {
   const playerRef = useRef();
   return (
     <MediaPlayer
+      className={style.player}
       ref={playerRef}
       preload
-      autoplay
+      autoPlay
       style={{ width, height, backgroundColor: 'black' }}
       aspectRatio={`${width / height}`}
       title={`${currentSrc?.name ?? ''}`}
@@ -71,7 +73,7 @@ export default function VideoPlayer({ playlist, width, height }) {
       onEnded={onEnded}
       currentTime={0}
     >
-      <MediaProvider />
+      <MediaProvider className={style.player} />
       <InnerPlayer
         setCurrentSrcIndex={setCurrentSrcIndex}
         currentSrcIndex={currentSrcIndex}
